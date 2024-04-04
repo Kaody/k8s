@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tsenamilay-mongo-cm
+data:
+  MONGODB_ROOT_USER: root
+  MONGODB_USERNAME: krimi
+  MONGODB_PORT: 27017
+  MONGODB_STORE_DATABASE: store_service
+  MONGODB_PRODUCT_DATABASE: product_service
+  MONGODB_CART_DATABASE: cart_service
+  MONGODB_WISHLIST_DATABASE: wishlist_service
