@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tsenamilay-mongodb
+  labels:
+    app: tsenamilay-mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tsenamilay-mongodb
+  template:
+    metadata:
+      labels:
+        app: tsenamilay-mongodb
+    spec:
+      containers:
+        - name: tsenamilay-mongodb
+          image: bitnami/mongodb
+          volumeMounts:
+            - name: mongodb-data
+              mountPath: /bitnami/mongodb
+            - name: entrypoint-initdb
+              mountPath: /docker-entrypoint-initdb.d/mongo-init.js
+          ports:
+            - name: mongo-port
+              containerPort: 27017
+          envFrom:
+            - secretRef:
+              name: tsenamilay-mongo-secret
+            - configMapRef:
+              name: tsenamilay-mongo-cm
+      volumes:
+        - name: mongodb-data
+          hostPath:
+            path: /home/serveremit/tsenamilay/k8s/dev/mongodb
+            type: DirectoryOrCreate
+        - name: entrypoint-initdb
+          hostPath:
+            path: /home/serveremit/tsenamilay/k8s/mongo/docker-entrypoint-initdb.d/mongo-init.js
+            type: FileOrCreate
