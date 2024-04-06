@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tsenamilay-user-database
+  labels:
+    app: tsenamilay-user-database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tsenamilay-user-database
+  template:
+    metadata:
+      labels:
+        app: tsenamilay-user-database
+    spec:
+      containers:
+        - name: tsenamilay-user-database
+          image: postgres
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: user-database-data
+          ports:
+            - name: user-db-port
+              containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: tsenamilay-global-cm
+                  key: POSTGRES_USERNAME
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: tsenamilay-global-cm
+                  key: POSTGRES_DEFAULT_DATABASE
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tsenamilay-global-secret
+                  key: POSTGRES_PASSWORD
+      volumes:
+        - name: user-database-data
+          hostPath:
+            path: /home/serveremit/tsenamilay/k8s/dev/postgres
+            type: DirectoryOrCreate
