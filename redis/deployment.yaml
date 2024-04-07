@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tsenamilay-redis
+  labels:
+    app: tsenamilay-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tsenamilay-redis
+  template:
+    metadata:
+      labels:
+        app: tsenamilay-redis
+    spec:
+      containers:
+        - name: tsenamilay-redis-stack
+          image: redis/redis-stack
+          ports:
+            - name: redis-port
+              containerPort: 6379
+            - name: insight-port
+              containerPort: 8001
