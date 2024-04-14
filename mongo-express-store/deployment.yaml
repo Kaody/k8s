@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tsenamilay-mongo-express-store
+  labels:
+    app: tsenamilay-mongo-express-store
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tsenamilay-mongo-express-store
+  template:
+    metadata:
+      labels:
+        app: tsenamilay-mongo-express-store
+    spec:
+      containers:
+        - name: tsenamilay-mongo-express-store
+          image: mongo-express
+          ports:
+            - name: express-port
+              containerPort: 8081
+          env:
+            - name: ME_CONFIG_BASICAUTH_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: tsenamilay-mongo-cm
+                  key: MONGODB_USERNAME
+            - name: ME_CONFIG_BASICAUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tsenamilay-mongo-secret
+                  key: MONGODB_PASSWORD
+            - name: ME_CONFIG_MONGODB_SERVER
+              value: mongo
+            - name: ME_CONFIG_MONGODB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: tsenamilay-mongo-cm
+                  key: MONGODB_PORT
+            - name: ME_CONFIG_MONGODB_ENABLE_ADMIN
+              value: "false"
+            - name: ME_CONFIG_MONGODB_AUTH_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: tsenamilay-mongo-cm
+                  key: MONGODB_STORE_DATABASE
+            - name: ME_CONFIG_MONGODB_AUTH_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: tsenamilay-mongo-cm
+                  key: MONGODB_USERNAME
+            - name: ME_CONFIG_MONGODB_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tsenamilay-mongo-secret
+                  key: MONGODB_PASSWORD
