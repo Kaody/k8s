@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-express-wishlist
+spec:
+  selector:
+    app: tsenamilay-mongo-express-wishlist
+  type: LoadBalancer
+  ports:
+    - port: 8081
+      targetPort: express-port
+      protocol: TCP
